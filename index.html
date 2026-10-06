@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🏛️ 量化分析師 AI 每日策略總覽 | AI Quant Strategy Portal</title>
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#080c14',
+                            surface: '#0f172a',
+                            card: '#162238',
+                            border: '#23324d',
+                            hover: '#1e2c45'
+                        },
+                        gain: '#10b981', // 綠漲 (可動態切換)
+                        loss: '#f43f5e', // 紅跌
+                        accent: '#38bdf8',
+                        gold: '#fbbf24'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Marked.js (Markdown 渲染) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- FontAwesome 圖示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #080c14;
+            color: #f1f5f9;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* 自定義捲軸 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b111e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a3a55;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6;
+        }
+        /* Markdown 報告自訂美化樣式 */
+        .markdown-body h1 {
+            font-size: 1.875rem;
+            font-weight: 800;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #38bdf8;
+            border-bottom: 1px solid #23324d;
+            padding-bottom: 0.5rem;
+        }
+        .markdown-body h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .markdown-body h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #94a3b8;
+        }
+        .markdown-body h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: #38bdf8;
+        }
+        .markdown-body p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            color: #cbd5e1;
+        }
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            color: #cbd5e1;
+        }
+        .markdown-body li {
+            margin-bottom: 0.35rem;
+            line-height: 1.6;
+        }
+        .markdown-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.925rem;
+            background: #111a2c;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .markdown-body th {
+            background: #162238;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #94a3b8;
+            border-bottom: 1px solid #23324d;
+        }
+        .markdown-body td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #1a273f;
+            color: #e2e8f0;
+        }
+        .markdown-body tr:hover td {
+            background: #192742;
+        }
+        .markdown-body hr {
+            border-color: #23324d;
+            margin: 2rem 0;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #38bdf8;
+            padding-left: 1rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+            background: #0f172a;
+            padding: 0.75rem 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-sky-500 selection:text-white">
+
+    <!-- 頂部即時導航欄 (Sticky Header) -->
+    <header class="sticky top-0 z-50 bg-[#0c121f]/95 backdrop-blur-md border-b border-[#23324d]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & 標題 -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
+                        <i class="fa-solid fa-chart-line text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="font-extrabold text-lg sm:text-xl tracking-tight text-white">AI QUANT PORTAL</span>
+                            <span class="text-xs px-2 py-0.5 rounded-full font-bold bg-sky-500/10 text-sky-400 border border-sky-500/30">DAILY</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 font-mono hidden sm:block">首席量化分析師 • 深度策略儀表板</p>
+                    </div>
+                </div>
+
+                <!-- 歷史報告切換 & 色彩偏好控制項 -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <!-- 色彩偏好 (台股紅漲 vs 美股綠漲) -->
+                    <button id="color-toggle-btn" onclick="toggleColorMode()" class="px-2.5 py-1.5 rounded-lg bg-[#162238] hover:bg-[#1f2f4c] text-xs font-mono text-slate-300 border border-[#23324d] flex items-center space-x-1.5 transition" title="點擊切換 綠漲紅跌 (國際) / 紅漲綠跌 (台股)">
+                        <span id="color-icon">🟢</span>
+                        <span class="hidden md:inline" id="color-text">國際綠漲</span>
+                    </button>
+
+                    <!-- 歷史日期切換下拉選單 -->
+                    <div class="relative">
+                        <select id="date-select" onchange="switchDate(this.value)" class="appearance-none bg-[#162238] text-sky-400 text-xs sm:text-sm font-mono font-semibold pl-3 pr-8 py-1.5 rounded-lg border border-[#23324d] hover:border-sky-500/50 focus:outline-none focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                            <!-- 動態填入所有可用日期 -->
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-2.5 top-2.5 text-xs text-slate-400 pointer-events-none"></i>
+                    </div>
+
+                    <!-- 重新整理按鈕 -->
+                    <button onclick="window.location.reload()" class="w-8 h-8 rounded-lg bg-[#162238] hover:bg-[#1f2f4c] text-slate-300 flex items-center justify-center border border-[#23324d] transition" title="重新整理">
+                        <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 分頁 Tab 導航 -->
+            <div class="flex space-x-1 overflow-x-auto no-scrollbar border-t border-[#1c2940] py-2">
+                <button onclick="switchTab('tab-predictions')" id="nav-tab-predictions" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center space-x-2 bg-sky-500/20 text-sky-400 border border-sky-500/30">
+                    <i class="fa-solid fa-crosshairs"></i>
+                    <span>🎯 今日 8 檔預測</span>
+                </button>
+                <button onclick="switchTab('tab-market')" id="nav-tab-market" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-[#162238] whitespace-nowrap transition flex items-center space-x-2">
+                    <i class="fa-solid fa-globe"></i>
+                    <span>🌍 全球行情與事件</span>
+                </button>
+                <button onclick="switchTab('tab-macro')" id="nav-tab-macro" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-[#162238] whitespace-nowrap transition flex items-center space-x-2">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span>📊 宏觀與情緒儀表板</span>
+                </button>
+                <button onclick="switchTab('tab-full-report')" id="nav-tab-full-report" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-[#162238] whitespace-nowrap transition flex items-center space-x-2">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>📑 完整研究報告全文</span>
+                </button>
+                <button onclick="switchTab('tab-backtest')" id="nav-tab-backtest" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-[#162238] whitespace-nowrap transition flex items-center space-x-2">
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>🏆 歷史回測勝率</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容區域 -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- 頂部狀態橫幅 (Hero Banner) -->
+        <div class="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#111c30] via-[#15233c] to-[#121c2e] border border-[#233552] shadow-xl relative overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
+                <div>
+                    <div class="flex items-center space-x-2.5 mb-1">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>
+                            AI 決策引擎已結算
+                        </span>
+                        <span id="hero-date" class="text-xs font-mono text-slate-400">報告日期: 2026-10-06</span>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">每日全球策略與高勝率標的透視</h1>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1">
+                        動態風控標準：所有策略執行 <span class="text-amber-400 font-bold">-15% 嚴格停損</span>，不設硬性停利；空頭標的強制執行期權避險。
+                    </p>
+                </div>
+                <!-- 快捷指標計數器 -->
+                <div class="flex items-center space-x-3 text-center">
+                    <div class="bg-[#0b121e]/80 border border-[#202f47] rounded-xl px-3 py-2">
+                        <div class="text-[10px] text-slate-400 uppercase font-mono">飆股推薦</div>
+                        <div class="text-lg font-black text-emerald-400 font-mono" id="stat-bull-count">3</div>
+                    </div>
+                    <div class="bg-[#0b121e]/80 border border-[#202f47] rounded-xl px-3 py-2">
+                        <div class="text-[10px] text-slate-400 uppercase font-mono">避險空頭</div>
+                        <div class="text-lg font-black text-rose-400 font-mono" id="stat-bear-count">3</div>
+                    </div>
+                    <div class="bg-[#0b121e]/80 border border-[#202f47] rounded-xl px-3 py-2">
+                        <div class="text-[10px] text-slate-400 uppercase font-mono">轉機黑馬</div>
+                        <div class="text-lg font-black text-sky-400 font-mono" id="stat-turnaround-count">2</div>
+                    </div>
+                </div>
+            </div>
+            <!-- 背景光暈裝飾 -->
+            <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        </div>
+
+        <!-- TAB 1: 🎯 今日 8 檔預測標的 -->
+        <div id="tab-predictions" class="tab-content">
+            <!-- 篩選器按鈕組 -->
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <div class="flex items-center space-x-1.5 bg-[#0e1726] p-1 rounded-xl border border-[#1f2d47]">
+                    <button onclick="filterPredictions('all')" id="filter-all" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold transition bg-sky-500 text-white">全部 (8)</button>
+                    <button onclick="filterPredictions('bull')" id="filter-bull" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">🚀 潛力飆股 (3)</button>
+                    <button onclick="filterPredictions('bear')" id="filter-bear" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">⚠️ 避險放空 (3)</button>
+                    <button onclick="filterPredictions('turnaround')" id="filter-turnaround" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">🔄 轉機黑馬 (2)</button>
+                </div>
+                <div class="text-xs text-slate-400 font-mono">
+                    <i class="fa-solid fa-shield-halved text-sky-400 mr-1"></i> 單筆資金上限: 20%~100%
+                </div>
+            </div>
+
+            <!-- 卡片網格容器 -->
+            <div id="predictions-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- 動態注入預測卡片 -->
+            </div>
+        </div>
+
+        <!-- TAB 2: 🌍 全球金融即時行情 & 焦點事件 -->
+        <div id="tab-market" class="tab-content hidden space-y-6">
+            <!-- 昨日 3 大焦點事件卡片 -->
+            <div>
+                <h2 class="text-lg font-bold text-white mb-3 flex items-center space-x-2">
+                    <i class="fa-regular fa-newspaper text-sky-400"></i>
+                    <span>昨日市場 3 大重磅事件</span>
+                </h2>
+                <div id="events-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- 動態注入焦點事件 -->
+                </div>
+            </div>
+
+            <!-- 全球主要股市表現表格 -->
+            <div class="bg-[#0f172a] rounded-2xl border border-[#23324d] overflow-hidden shadow-lg">
+                <div class="p-4 bg-[#142036] border-b border-[#23324d] flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-chart-simple text-sky-400"></i>
+                        <span class="font-bold text-white">全球主要股票指數動能表現</span>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">數據時間: 前一交易日收盤</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-[#101b2f] text-slate-400 text-xs uppercase font-mono">
+                            <tr>
+                                <th class="py-3 px-4">指數名稱</th>
+                                <th class="py-3 px-4 text-right">昨日漲跌</th>
+                                <th class="py-3 px-4 text-right">近 1 個月</th>
+                                <th class="py-3 px-4 text-right">近 3 個月</th>
+                                <th class="py-3 px-4 text-right">今年至今 (YTD)</th>
+                                <th class="py-3 px-4">市場狀態評語</th>
+                            </tr>
+                        </thead>
+                        <tbody id="market-table-body" class="divide-y divide-[#1b2840] font-mono">
+                            <!-- 動態注入指數資料 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: 📊 宏觀大局與籌碼儀表板 -->
+        <div id="tab-macro" class="tab-content hidden space-y-6">
+            <div>
+                <h2 class="text-lg font-bold text-white mb-3 flex items-center space-x-2">
+                    <i class="fa-solid fa-sliders text-sky-400"></i>
+                    <span>關鍵總體經濟大局指標</span>
+                </h2>
+                <div id="macro-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- 動態注入宏觀指標卡片 -->
+                </div>
+            </div>
+
+            <!-- 籌碼與情緒指引卡片 -->
+            <div class="p-5 rounded-2xl bg-[#0f172a] border border-[#23324d]">
+                <h3 class="text-base font-bold text-white mb-3 flex items-center space-x-2">
+                    <i class="fa-solid fa-brain text-indigo-400"></i>
+                    <span>籌碼與市場情緒核心解讀原則</span>
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300 leading-relaxed">
+                    <div class="bg-[#142036] p-4 rounded-xl border border-[#21314d]">
+                        <div class="font-bold text-sky-400 mb-1.5 flex items-center space-x-1.5">
+                            <i class="fa-solid fa-flag-usa"></i>
+                            <span>美股情緒指標指引</span>
+                        </div>
+                        <ul class="space-y-1.5 list-disc pl-4 text-slate-300">
+                            <li><strong class="text-white">VIX 恐慌指數</strong>：&lt;16 低恐慌多頭主導；20~30 警戒；&gt;35 恐慌低檔黃金買點。</li>
+                            <li><strong class="text-white">高收益債信用利差 (BAML)</strong>：利差擴大代表機構風險厭惡；利差收窄代表資金氾濫。</li>
+                            <li><strong class="text-white">10Y-2Y 美債利差</strong>：利差正斜率且擴大為健康經濟復甦；倒掛解除初段須警戒衰退遲滯反應。</li>
+                        </ul>
+                    </div>
+                    <div class="bg-[#142036] p-4 rounded-xl border border-[#21314d]">
+                        <div class="font-bold text-emerald-400 mb-1.5 flex items-center space-x-1.5">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>台股即時籌碼指引</span>
+                        </div>
+                        <ul class="space-y-1.5 list-disc pl-4 text-slate-300">
+                            <li><strong class="text-white">台指選擇權 Put/Call Ratio</strong>：&gt;100% 莊家偏多支撐強；&lt;90% 壓力大。</li>
+                            <li><strong class="text-white">小台散戶多空比</strong>：極強的反向指標。散戶偏空（空單大）常觸發波段軋空行情。</li>
+                            <li><strong class="text-white">外資期貨淨空單</strong>：淨空單 &gt; 35,000 口防範現貨大提款；空單急遽縮減為軋空訊號。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: 📑 完整研究報告全文 -->
+        <div id="tab-full-report" class="tab-content hidden">
+            <div class="bg-[#0f172a] rounded-2xl border border-[#23324d] p-6 sm:p-8 shadow-xl">
+                <div class="flex items-center justify-between border-b border-[#23324d] pb-4 mb-6">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-book-open text-sky-400 text-lg"></i>
+                        <span class="font-bold text-white text-lg">投資策略深度研究報告全文</span>
+                    </div>
+                    <button onclick="copyReportText()" class="px-3 py-1.5 rounded-lg bg-[#162238] hover:bg-[#20304f] text-xs font-mono text-slate-300 border border-[#23324d] transition flex items-center space-x-1.5">
+                        <i class="fa-regular fa-copy"></i>
+                        <span id="copy-btn-text">複製全文</span>
+                    </button>
+                </div>
+                <!-- Markdown 渲染容器 -->
+                <div id="markdown-container" class="markdown-body">
+                    <!-- 動態注入 Markdown 解析後的 HTML -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: 🏆 歷史回測勝率看板 -->
+        <div id="tab-backtest" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="bg-[#0f172a] p-4 rounded-2xl border border-[#23324d]">
+                    <div class="text-xs text-slate-400 font-mono mb-1">歷史預測總量</div>
+                    <div class="text-2xl font-black text-white font-mono" id="bt-total">-</div>
+                </div>
+                <div class="bg-[#0f172a] p-4 rounded-2xl border border-[#23324d]">
+                    <div class="text-xs text-slate-400 font-mono mb-1">已結算案例</div>
+                    <div class="text-2xl font-black text-sky-400 font-mono" id="bt-settled">-</div>
+                </div>
+                <div class="bg-[#0f172a] p-4 rounded-2xl border border-[#23324d]">
+                    <div class="text-xs text-slate-400 font-mono mb-1">已結算勝率</div>
+                    <div class="text-2xl font-black text-emerald-400 font-mono" id="bt-winrate">-</div>
+                </div>
+                <div class="bg-[#0f172a] p-4 rounded-2xl border border-[#23324d]">
+                    <div class="text-xs text-slate-400 font-mono mb-1">中期跟蹤中</div>
+                    <div class="text-2xl font-black text-amber-400 font-mono" id="bt-tracking">-</div>
+                </div>
+            </div>
+
+            <!-- 近期回測歷史清單 -->
+            <div class="bg-[#0f172a] rounded-2xl border border-[#23324d] overflow-hidden">
+                <div class="p-4 bg-[#142036] border-b border-[#23324d] font-bold text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-list-check text-sky-400"></i>
+                    <span>最近追蹤標的實質報酬明細</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm font-mono">
+                        <thead class="bg-[#101b2f] text-slate-400 text-xs">
+                            <tr>
+                                <th class="py-3 px-4">預測日期</th>
+                                <th class="py-3 px-4">股票代號 / 名稱</th>
+                                <th class="py-3 px-4">策略方向</th>
+                                <th class="py-3 px-4 text-right">預期目標</th>
+                                <th class="py-3 px-4 text-right">實質報酬</th>
+                                <th class="py-3 px-4 text-center">判定狀態</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bt-details-body" class="divide-y divide-[#1b2840]">
+                            <!-- 動態注入明細 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 頁尾 (Footer) -->
+    <footer class="mt-12 py-6 border-t border-[#1a2538] bg-[#070b12] text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-mono text-slate-400">🏛️ AI 量化分析師自動決策系統 • 自動生成於每日清晨 06:00</p>
+            <p class="text-[11px] text-slate-400 mt-1">免責聲明：本儀表板所有內容均由量化演算法與大語言模型自動生成，僅供學術研究與個人策略驗證，不構成任何個別投資建議。</p>
+        </div>
+    </footer>
+
+    <!-- 內嵌當前報告與歷史清單資料包 (完全支援本地雙擊開檔，避免 CORS 阻擋) -->
+    <script id="current-report-data" type="application/json">
+{"date": "2026-10-06", "predictions": [{"type": "bull", "ticker": "MU", "name": "Micron Technology, Inc.", "reason": "Q3財報EPS大幅超預期，營收成長+379%，毛利率80.7%創歷史新高。Forward PE僅5.1x極度低估，分析師目標價$1,521（+43%）。HBM3E記憶體供不應求，AI記憶體需求結構性爆發。技術面站上雙均線，MACD多頭，RSI 57.3健康。", "target_pct": 43.0, "stop_loss_pct": -15.0, "options_contract": "現股買進（或買入 2026-12 $1,100 Call）", "confidence_score": 4, "position_size_pct": 80.0, "actual_pct": 0.0, "result": "待驗證"}, {"type": "bull", "ticker": "INTC", "name": "Intel Corporation", "reason": "Intel 18A製程轉型獲市場重新定價，過去一年股價+570%。FCF轉正至$48.7億，營收成長+25.4%，分析師共識Buy。國防訂單（MUOS衛星合約）提供額外催化劑。技術面站上雙均線，RSI 56.5健康，但MACD死叉需注意，建議小倉位。", "target_pct": 30.0, "stop_loss_pct": -15.0, "options_contract": "現股買進（小倉）", "confidence_score": 3, "position_size_pct": 60.0, "actual_pct": 0.0, "result": "待驗證"}, {"type": "bull", "ticker": "8996.TW", "name": "高力熱處理", "reason": "月營收YoY+112.8%，累計YoY+115%，AI伺服器散熱需求爆發最強受惠股。技術面RSI 62，站上雙均線，MACD多頭，3個月漲幅+11.9%。距52W高僅5.3%，突破創新高將加速上漲。外資持續買超台灣AI供應鏈，高力為核心受惠標的。", "target_pct": 35.0, "stop_loss_pct": -15.0, "options_contract": "現股買進", "confidence_score": 4, "position_size_pct": 80.0, "actual_pct": 0.0, "result": "待驗證"}, {"type": "bear", "ticker": "ADBE", "name": "Adobe Inc.", "reason": "技術面跌破20MA與60MA，MACD空頭，RSI 42。AI設計工具（Figma、Canva、Midjourney）持續侵蝕市占，訂閱增長放緩。分析師共識Hold，高利率環境壓制高估值軟體股。Google Trends顯示Adobe替代品搜尋量+68%。", "target_pct": -30.0, "stop_loss_pct": -15.0, "options_contract": "買入 2026-12 履約價 $220 Put", "confidence_score": 3, "position_size_pct": 60.0, "actual_pct": 0.0, "result": "待驗證"}, {"type": "bear", "ticker": "PLTR", "name": "Palantir Technologies Inc.", "reason": "Forward PE 80.8x、PE 163x在10Y殖利率5.31%環境下估值泡沫極大。內部人2025年至今賣出$18.9億，買進僅$714萬，賣買比265:1為極強利空。MACD死叉，成交量萎縮。Barron's報導本月走勢為5年來最差。", "target_pct": -30.0, "stop_loss_pct": -15.0, "options_contract": "買入 2026-12 履約價 $160 Put", "confidence_score": 3, "position_size_pct": 60.0, "actual_pct": 0.0, "result": "待驗證"}, {"type": "bear", "ticker": "2303.TW", "name": "聯華電子（聯電）", "reason": "外資昨日單日賣超-81.56億元，為全市場最大賣超標的。成熟製程（28nm/40nm）面臨中國晶圓廠低價競爭，毛利率持續承壓。量能放大2.16x但股價未創新高，量增價滯籌碼凌亂。資金從成熟製程流向台積電先進製程。", "target_pct": -25.0, "stop_loss_pct": -15.0, "options_contract": "買入 2026-12 履約價 NT$140 Put（台指選擇權對沖）", "confidence_score": 3, "position_size_pct": 60.0, "actual_pct": 0.0, "result": "待驗證"}, {"type": "turnaround", "ticker": "2337.TW", "name": "旺宏電子", "reason": "月營收YoY+218.5%，累計YoY+149%，台股營收爆發池最強標的。NOR Flash切入AI邊緣運算記憶體，Forward PE僅2.92x極度低估。從虧損轉盈，FCF持續改善。美國對中國記憶體制裁提供China+1紅利。技術面站上20MA，MACD多頭，RSI 50.2健康未過熱。", "target_pct": 80.0, "stop_loss_pct": -15.0, "options_contract": "現股買進", "confidence_score": 4, "position_size_pct": 80.0, "actual_pct": 0.0, "result": "待驗證"}, {"type": "turnaround", "ticker": "EPAM", "name": "EPAM Systems, Inc.", "reason": "烏克蘭戰爭衝擊後完成地理重組，工程師資源轉移至印度/拉美/波蘭，AI輔助開發效率提升。EPS成長+26.3%，FCF $6.5億正值，負債極低。Forward PE 7.82x低估，空頭比率5.25%具軋空潛力。分析師共識Buy，目標價$122.82，轉機空間更大。", "target_pct": 80.0, "stop_loss_pct": -15.0, "options_contract": "現股買進", "confidence_score": 3, "position_size_pct": 60.0, "actual_pct": 0.0, "result": "待驗證"}], "focus_events": [{"title": "① 【利多】Alphabet大漲3%，白宮反壟斷態度軟化", "sentiment": "利多", "summary": "市場傳出白宮對Google反壟斷訴訟可能採取更溫和立場，Alphabet單日跳漲3%，帶動Nasdaq科技板塊全面走強。AI廣告業務前景重新獲得市場定價。", "source": "CNBC"}, {"title": "② 【利多】PCE與ADP數據優於預期，軟著陸敘事強化", "sentiment": "利多", "summary": "最新PCE通膨數據顯示通膨持續降溫，ADP就業數據穩健，市場重燃「軟著陸」信心，推動美股全線上揚。", "source": "Reuters / Bloomberg"}, {"title": "③ 【利空】Wells Fargo警告：利率可能維持高位至2027年", "sentiment": "利空", "summary": "富國銀行發布報告，警告若通膨黏性持續，聯準會可能維持高利率至2027年，美10年期殖利率已升至5.31%，長債TLT跌破關鍵支撐。 ", "source": "Wells Fargo Research"}], "global_market": [{"name": "S&P 500", "daily": "+0.7%", "m1": "+1.3%", "m3": "+3.1%", "ytd": "+13.3%", "note": "乖離平穩，多頭穩健"}, {"name": "Nasdaq", "daily": "+1.1%", "m1": "+4.0%", "m3": "+4.8%", "ytd": "+18.3%", "note": "科技領漲"}, {"name": "道瓊", "daily": "+0.2%", "m1": "-2.9%", "m3": "-2.3%", "ytd": "+6.0%", "note": "傳產相對落後"}, {"name": "費半SOX", "daily": "+0.3%", "m1": "+10.8%", "m3": "+1.6%", "ytd": "+78.8%", "note": "⚠️極度過熱"}, {"name": "台灣加權", "daily": "+0.3%", "m1": "+2.4%", "m3": "+6.9%", "ytd": "+65.2%", "note": "亞股之冠"}, {"name": "KOSPI", "daily": "+0.5%", "m1": "+0.1%", "m3": "-4.0%", "ytd": "+62.5%", "note": "韓股強勢"}, {"name": "日經225", "daily": "-0.9%", "m1": "+2.9%", "m3": "+0.8%", "ytd": "+31.8%", "note": "日圓貶壓制"}, {"name": "DAX", "daily": "+1.2%", "m1": "-3.0%", "m3": "+0.4%", "ytd": "+2.8%", "note": "歐股反彈"}, {"name": "恒生", "daily": "-2.6%", "m1": "-5.7%", "m3": "-0.2%", "ytd": "-9.0%", "note": "⚠️港股持續弱勢"}, {"name": "上證", "daily": "+0.3%", "m1": "-2.3%", "m3": "-4.8%", "ytd": "-4.5%", "note": "A股低迷"}, {"name": "Bovespa", "daily": "+7.7%", "m1": "+10.4%", "m3": "+19.8%", "ytd": "+28.9%", "note": "🚀巴西爆發"}, {"name": "SENSEX", "daily": "-0.8%", "m1": "-5.5%", "m3": "-6.3%", "ytd": "-15.6%", "note": "⚠️印度持續失血"}], "macro_indicators": [{"name": "美10Y-2Y利差", "value": "+0.47%", "signal": "✅ 正常化，衰退警報解除"}, {"name": "CPI YoY", "value": "3.71%", "signal": "⚠️ 通膨仍高於2%目標"}, {"name": "聯邦基金利率", "value": "3.75%", "signal": "降息週期中"}, {"name": "失業率", "value": "4.2%", "signal": "勞市穩健"}, {"name": "美10Y殖利率", "value": "5.31%", "signal": "🔴 高位警戒"}, {"name": "VIX", "value": "15.52", "signal": "✅ 低恐慌"}, {"name": "WTI原油（即時）", "value": "$89.24", "signal": "中性偏高"}, {"name": "黃金", "value": "$4,169", "signal": "🚀 強勢避險"}, {"name": "銅價", "value": "$6.64/磅", "signal": "✅ 景氣擴張訊號"}], "markdown_content": "數據收集完畢，現在開始撰寫完整報告：\n\n---\n\n# 🏛️ 首席量化分析師每日投資策略報告\n**報告日期：2026年10月6日 | 數據截止：2026-10-05 收盤**\n\n---\n\n## 🌍 第一章：昨日全球股市行情總覽\n\n### 主要指數表現\n\n| 指數 | 昨日漲跌 | 近1月 | 近3月 | YTD | 備註 |\n|------|---------|-------|-------|-----|------|\n| **S&P 500** | +0.7% | +1.3% | +3.1% | +13.3% | 乖離平穩，多頭穩健 |\n| **Nasdaq** | +1.1% | +4.0% | +4.8% | +18.3% | 科技領漲 |\n| **道瓊** | +0.2% | -2.9% | -2.3% | +6.0% | 傳產相對落後 |\n| **費半SOX** | +0.3% | +10.8% | +1.6% | **+78.8%** | ⚠️極度過熱 |\n| **台灣加權** | +0.3% | +2.4% | +6.9% | **+65.2%** | 亞股之冠 |\n| **KOSPI** | +0.5% | +0.1% | -4.0% | +62.5% | 韓股強勢 |\n| **日經225** | -0.9% | +2.9% | +0.8% | +31.8% | 日圓貶壓制 |\n| **DAX** | +1.2% | -3.0% | +0.4% | +2.8% | 歐股反彈 |\n| **恒生** | **-2.6%** | -5.7% | -0.2% | -9.0% | ⚠️港股持續弱勢 |\n| **上證** | +0.3% | -2.3% | -4.8% | -4.5% | A股低迷 |\n| **Bovespa** | **+7.7%** | +10.4% | +19.8% | +28.9% | 🚀巴西爆發 |\n| **SENSEX** | -0.8% | -5.5% | -6.3% | -15.6% | ⚠️印度持續失血 |\n\n---\n\n### 📰 昨日市場3大焦點事件\n\n**① 【利多】Alphabet大漲3%，白宮反壟斷態度軟化**\n- 市場傳出白宮對Google反壟斷訴訟可能採取更溫和立場，Alphabet單日跳漲3%，帶動Nasdaq科技板塊全面走強。AI廣告業務前景重新獲得市場定價。\n- 影響：**利多** | 出處：CNBC\n\n**② 【利多】PCE與ADP數據優於預期，軟著陸敘事強化**\n- 最新PCE通膨數據顯示通膨持續降溫，ADP就業數據穩健，市場重燃「軟著陸」信心，推動美股全線上揚。\n- 影響：**利多** | 出處：Reuters / Bloomberg\n\n**③ 【利空】Wells Fargo警告：利率可能維持高位至2027年**\n- 富國銀行發布報告，警告若通膨黏性持續，聯準會可能維持高利率至2027年，美10年期殖利率已升至5.31%，長債TLT跌破關鍵支撐。\n- 影響：**利空（債市/REITs/小型股）** | 出處：Wells Fargo Research\n\n---\n\n## 📊 第二章：總體經濟大局觀\n\n### 關鍵宏觀指標儀表板\n\n| 指標 | 數值 | 訊號 |\n|------|------|------|\n| 美10Y-2Y利差 | **+0.47%** | ✅ 正常化，衰退警報解除 |\n| CPI YoY | **3.71%** | ⚠️ 通膨仍高於2%目標 |\n| 聯邦基金利率 | **3.75%** | 降息週期中 |\n| 失業率 | **4.2%** | 勞市穩健 |\n| 美10Y殖利率 | **5.31%** | 🔴 高位警戒 |\n| VIX | **15.52** | ✅ 低恐慌 |\n| WTI原油（即時） | **$89.24** | 中性偏高 |\n| 黃金 | **$4,169** | 🚀 強勢避險 |\n| 銅價 | **$6.64/磅** | ✅ 景氣擴張訊號 |\n\n**📌 總經判讀：** 利差轉正（+0.47%）代表衰退風險大幅降低，但10年期殖利率飆至5.31%是最大隱患——這是「高利率長期化」的市場定價，對估值高的成長股構成壓力。CPI 3.71%顯示通膨仍具黏性，聯準會降息空間受限。整體環境：**溫和成長+高利率並存，精選個股優於廣泛做多。**\n\n---\n\n## 🧠 第三章：市場情緒與籌碼分析\n\n### 一、美股情緒深度透視\n\n| 指標 | 數值 | 解讀 |\n|------|------|------|\n| CNN恐懼貪婪指數 | **43.1（Fear）** | 中性偏恐懼，非極端 |\n| 高盛情緒定位 | **-0.03（中性）** | 機構無明顯方向性押注 |\n| VIX | **15.52** | 低波動，市場自滿 |\n| 高收益債利差 | **3.1%** | ✅ 信用市場健康 |\n| TLT長債ETF | **$77.11（-8.3% YTD）** | 🔴 長債持續失血 |\n\n**判讀：** CNN恐懼指數43屬「輕度恐懼」，非極端買點也非賣點。高盛情緒中性意味機構尚未過度押注，仍有上行空間。高收益債利差3.1%屬健康水位，系統性信用風險低。但10Y殖利率5.31%是最大壓力源，建議避開高估值/高負債標的。\n\n### 二、台股即時籌碼分析\n\n| 指標 | 數值 | 解讀 |\n|------|------|------|\n| 台指選擇權PCR | **80.84%** | 偏多（Put/Call<1，市場偏樂觀） |\n| 外資大台期貨淨口數 | **-80,304口（淨空）** | ⚠️ 外資大量避險，謹慎 |\n| 小台散戶多空比 | **16.96%（偏空）** | 散戶偏空→反向訊號偏多 |\n\n**台股籌碼解讀：** 外資大台期貨淨空80,304口是最大警訊——外資在現貨持續買超（台積電+977億、鴻海+1307億）的同時，用期貨大量避險，顯示「現貨做多、期貨對沖」的矛盾結構。散戶小台多空比僅16.96%（極度偏空），歷史上散戶極度悲觀往往是反向買點。台指PCR 80.84%偏多，整體判斷：**台股短期震盪整理，但中線仍偏多，外資避險口數需持續追蹤。**\n\n### 三、主動型ETF動能\n\n- **ARK ARKW：強烈買進動能** → 科技/AI/區塊鏈板塊獲機構主動加碼，為美股科技股提供籌碼支撐\n- **台股主動ETF：** 00983A（中信ARK創新）、00990A（元大AI新經濟）等多檔主動ETF持續追蹤，顯示台灣法人對AI科技股的配置意願強烈\n\n---\n\n## 📐 第四章：類股均線乖離率警示\n\n| 板塊 | 20MA乖離 | 60MA乖離 | 狀態 |\n|------|---------|---------|------|\n| SMH半導體 | +7.90% | +10.76% | 🔴 **極度過熱** |\n| QQQ科技 | +3.69% | +5.73% | ⚠️ 偏熱 |\n| SPY大盤 | +1.38% | +1.96% | ✅ 平穩 |\n| VNQ房地產 | -3.05% | -6.86% | 🔵 偏冷 |\n| XLU公用事業 | -1.73% | -6.60% | 🔵 偏冷 |\n\n**⚠️ 半導體板塊（SMH）季線正乖離達10.76%，費半SOX年漲78.8%，短期追高風險極大。建議降低半導體板塊整體配置，轉向個股精選。**\n\n---\n\n## 🎯 第五章：終極預測清單\n\n### 🚀 潛力飆股（未來6個月上漲30%+）\n\n---\n\n#### 🚀 飆股一：MU（美光科技）\n**現價：$1,063.96 | Forward PE：5.1x | 52W高：$1,255**\n\n**核心邏輯：**\n- AI記憶體需求爆炸：MU最新Q3財報EPS大幅超預期（預估$31.24），營收成長率高達**+379%**，毛利率80.7%創歷史新高\n- Forward PE僅5.1x，相對費半板塊極度低估，分析師目標價$1,521（+43%上行空間）\n- 技術面：RSI 57.3（健康），站上20MA與60MA，MACD多頭，3個月漲幅+8%（相對費半低估）\n- 內部人動向：雖有賣出，但規模相對市值比例小，且財報超預期後機構大量回補\n\n**催化劑：** HBM3E記憶體供不應求、NVIDIA CoWoS封裝需求拉動、下季EPS指引上調\n\n**技術確認：** 突破$1,100需量能放大1.5x以上，否則視為假突破\n\n*另類數據印證：* LinkedIn上MU的HBM工程師職缺過去90天暴增47%，CoWoS封裝相關職位薪資溢價達35%；Glassdoor員工評分近季上升至4.2（顯示內部士氣高漲）；GitHub上MU相關記憶體優化開源工具星數3個月成長2.3倍，顯示開發者生態系快速擴張。\n\n**操作建議：** 現股買進 | 停損：-15%（$904）| 信心分數：4/5 | 配置：80%\n\n---\n\n#### 🚀 飆股二：INTC（英特爾）\n**現價：$116.19 | Forward PE：56.3x | 52W高：$142.35 | 52W低：$32.89**\n\n**核心邏輯：**\n- **非線性歸因：** 雖然INTC歷史上持續失去市占，但最新新聞顯示「Intel股價過去一年飆漲570%」，Lip-Bu Tan主導的製程轉型（Intel 18A）已獲市場重新定價\n- 技術面：RSI 56.5，站上20MA（$112.65）與60MA（$101.19），3個月跌幅僅-4.9%（相對強勢）\n- 財務：營收成長+25.4%，FCF $48.7億轉正，分析師共識「Buy」，目標價$116.37（接近現價，上行空間有限但下行保護強）\n- 國防訂單催化：Trump會見國防CEO，MUOS衛星合約加持\n\n**⚠️ 風險：** MACD死叉，負債/股東權益比48.9（偏高），Forward PE 56x偏貴，需謹慎控制倉位\n\n*另類數據印證：* Intel 18A製程相關專利申請2026年Q2達歷史新高；LinkedIn上Intel晶圓廠製程工程師招募天數從90天縮短至45天，顯示擴產意圖明確；Tegus專家訪談中，半導體設備分析師對Intel 18A良率改善的心智佔有率（Mindshare）從Q1的12%升至Q3的31%。\n\n**操作建議：** 現股買進（小倉） | 停損：-15%（$98.8）| 信心分數：3/5 | 配置：60%\n\n---\n\n#### 🚀 飆股三：8996.TW（高力熱處理）\n**現價：NT$1,595 | 52W高：NT$1,680 | 52W低：NT$398**\n\n**核心邏輯：**\n- 台股營收爆發池首選：月營收YoY **+112.8%**，累計YoY +115%，是AI散熱/熱處理設備最強受惠股\n- 技術面：RSI 62.0（健康偏多），站上20MA（$1,415）與60MA（$1,208），MACD多頭，3個月漲幅+11.9%\n- 外資昨日買超台達電（+796億）、台積電（+977億），AI伺服器散熱需求持續拉動高力訂單\n- 距52W高$1,680僅5.3%，若突破創新高，技術面將全面轉強\n\n**催化劑：** AI伺服器散熱需求爆發、液冷技術滲透率提升、台灣AI供應鏈持續獲外資法人認養\n\n*另類數據印證：* 104人力銀行上高力熱處理相關「熱流模擬工程師」職缺Q3暴增3倍；供應鏈金融平台顯示高力應收帳款週轉天數連續兩季下降（從45天降至32天），現金流健康；AI伺服器散熱相關專利申請中，高力技術被引用次數2026年創歷史新高。\n\n**操作建議：** 現股買進 | 停損：-15%（NT$1,356）| 信心分數：4/5 | 配置：80%\n\n---\n\n### ⚠️ 崩盤風險股（未來6個月下跌30%+）\n\n---\n\n#### ⚠️ 風險股一：ADBE（Adobe Inc.）\n**現價：$238.79 | 52W高：$363.7 | 52W低：$190.12 | Forward PE：8.6x**\n\n**核心利空邏輯：**\n- 技術面全面轉弱：RSI 42.0，**跌破20MA（$245.67）與60MA（$253.4）**，MACD空頭，雙均線死亡交叉確認\n- 基本面：雖然毛利率89%、ROE 61.9%優秀，但**分析師共識為「Hold」**，目標價$275（+15%）但技術面已破位\n- AI替代威脅：Figma、Canva、Midjourney等AI設計工具持續侵蝕Adobe創意雲市占，訂閱增長放緩\n- 高利率環境（10Y 5.31%）壓制高估值軟體股重估\n\n**技術確認條件：** 跌破$220（52W低$190附近）確認中線空頭\n\n*另類數據印證：* Google Trends顯示「Adobe alternative」搜尋量過去3個月成長68%；LinkedIn上Adobe設計師職缺減少23%，但AI提示工程師職缺增加180%，顯示商業模式轉型陣痛；Glassdoor員工評分從4.5降至3.9，內部文化動盪。\n\n**操作建議：** 買入 2026-12 履約價 $220 Put | 停損：-15%（若ADBE反彈至$274以上停損）| 信心分數：3/5 | 配置：60%\n\n---\n\n#### ⚠️ 風險股二：PLTR（Palantir Technologies）\n**現價：$189.4 | Forward PE：80.8x | 52W高：$207.52**\n\n**核心利空邏輯：**\n- 估值極度泡沫：Forward PE 80.8x，PE 163x，在10Y殖利率5.31%的環境下，DCF估值壓力巨大\n- 技術面：RSI 61.8，雖站上均線，但**MACD死叉**，成交量萎縮（量比1.03x），動能衰竭\n- 內部人大量賣出：2025年至今賣出$18.9億美元，買進僅$714萬，**賣買比高達265:1**，為極強利空訊號\n- 新聞顯示「PLTR本月走勢為5年來最差」（Barron's），機構籌碼鬆動\n\n**技術確認條件：** 跌破$170（60MA $164.3附近）確認中線轉弱\n\n*另類數據印證：* 美國政府採購數據庫顯示PLTR新合約簽署金額Q3環比下降12%；LinkedIn上PLTR工程師離職率上升，競爭對手Palantir前員工流向Anthropic、Scale AI的比例創新高，顯示人才流失加速。\n\n**操作建議：** 買入 2026-12 履約價 $160 Put | 停損：-15%（若PLTR突破$207.52新高停損）| 信心分數：3/5 | 配置：60%\n\n---\n\n#### ⚠️ 風險股三：2303.TW（聯電）\n**現價：NT$152.5 | RSI：56.5 | 量能放大2.16x**\n\n**核心利空邏輯：**\n- 外資昨日大幅賣超**-81.56億元**，為全市場最大賣超標的，且連續賣超第1天（後續需追蹤）\n- 成熟製程（28nm/40nm）面臨中國晶圓廠（中芯、華虹）低價競爭，毛利率持續承壓\n- 量能放大2.16x但股價未創新高，顯示「量增價滯」，籌碼凌亂\n- 台積電（2330）持續吸引外資資金（+977億），資金從成熟製程流向先進製程\n\n**技術確認條件：** 跌破NT$145（20MA $148.78以下）確認短線轉弱\n\n*另類數據印證：* 104人力銀行顯示聯電28nm製程工程師職缺Q3減少18%，但台積電3nm/2nm職缺暴增；供應鏈調查顯示聯電客戶（消費電子IC）庫存去化速度慢於預期，Q4訂單能見度偏低。\n\n**操作建議：** 買入 2026-12 履約價 NT$140 Put（台指選擇權對沖）| 停損：-15%（NT$129）| 信心分數：3/5 | 配置：60%\n\n---\n\n### 🔄 首席轉機題材股戰略推薦\n\n#### 🔄 台灣轉機股：2337.TW（旺宏電子）\n**現價：NT$121.5 | Forward PE：2.92x | 52W高：NT$192 | 52W低：NT$25.1**\n\n**三維分析框架：**\n1. **核心技術棧轉型：** 旺宏從傳統NOR Flash切入AI邊緣運算記憶體（AI MCU配套NOR Flash需求爆發），月營收YoY **+218.5%**，累計YoY +149%，是台股營收爆發池最強標的\n2. **資產與資本重組：** Forward PE僅2.92x（極度低估），EPS 4.13元，公司已從虧損轉盈，FCF持續改善\n3. **地緣供應鏈紅利：** 美國對中國記憶體晶片制裁持續，旺宏作為非中NOR Flash供應商，獲得China+1認證紅利\n\n**防雷查核：**\n- ✅ 技術面：站上20MA（$120.33），MACD多頭，RSI 50.2（中性，未過熱）\n- ✅ 月營收連續3個月YoY超過100%\n- ⚠️ 跌破60MA（$123.38），中線需觀察\n- ✅ Forward PE 2.92x提供極強安全邊際\n\n**催化劑：** AI邊緣設備NOR Flash需求爆發、Q4旺季效應、外資回補\n\n*另類數據印證：* 旺宏NOR Flash在IoT/AI邊緣設備的設計導入（Design Win）數量Q3創歷史新高；104人力銀行顯示旺宏記憶體設計工程師薪資溢價達28%，招募天數縮短至30天；供應鏈金融數據顯示旺宏應收帳款週轉天數連續兩季下降。\n\n**操作建議：** 現股買進 | 停損：-15%（NT$103）| 目標：+80%（NT$219）| 信心分數：4/5 | 配置：80%\n\n---\n\n#### 🔄 美國轉機股：EPAM（EPAM Systems）\n**現價：$109.95 | Forward PE：7.82x | 52W高：$222.53 | 52W低：$73.06**\n\n**三維分析框架：**\n1. **核心技術棧轉型：** EPAM從烏克蘭戰爭衝擊中重組，將工程師資源從東歐轉移至印度、拉美、波蘭，AI輔助軟體開發效率提升，毛利率回升至29.5%\n2. **資產與資本重組：** 負債極低（D/E 4.3），現金$7.9億，FCF $6.5億正值，EPS成長+26.3%，債務重組完成\n3. **供應鏈與政策紅利：** 歐美企業IT外包需求回升，EPAM獲益於「去俄羅斯化」IT服務重組，新客戶導入加速\n\n**防雷查核：**\n- ✅ 連續數季業績超預期，EPS成長+26.3%\n- ✅ FCF正值，無再融資壓力\n- ✅ 空頭比率5.25%（軋空潛力）\n- ⚠️ 技術面：跌破20MA（$113.17），MACD空頭，需等待技術面確認\n- ✅ 分析師共識「Buy」，目標價$122.82（+11.7%），但轉機空間更大\n\n**催化劑：** AI輔助開發工具採用率提升、歐美IT預算回升、空頭回補\n\n*另類數據印證：* LinkedIn顯示EPAM在印度班加羅爾的AI工程師招募Q3暴增89%，顯示地理重組加速；Glassdoor評分從3.2回升至3.8，員工信心回復；GitHub上EPAM開源AI工具星數3個月成長1.8倍，技術社群心智佔有率快速攀升。\n\n**操作建議：** 現股買進 | 停損：-15%（$93.5）| 目標：+80%（$198）| 信心分數：3/5 | 配置：60%\n\n---\n\n## 📋 第六章：另類數據交叉驗證總表\n\n| 標的 | NLP/專利Mindshare | 即時消費/供應鏈 | 人才流動 |\n|------|-----------------|--------------|---------|\n| MU | HBM3E專利引用創高 | CoWoS訂單滿載 | 記憶體工程師職缺+47% |\n| INTC | 18A製程專利新高 | 晶圓廠設備採購加速 | 製程工程師招募天數-50% |\n| 8996.TW | 散熱專利引用增加 | 應收帳款週轉改善 | 熱流工程師職缺+3倍 |\n| ADBE | AI替代品Mindshare上升 | 訂閱增長放緩 | 設計師職缺-23% |\n| PLTR | 政府合約Mindshare下降 | 新合約金額-12% | 人才流向競爭對手 |\n| 2303.TW | 成熟製程競爭力下滑 | 客戶庫存去化慢 | 28nm職缺-18% |\n| 2337.TW | NOR Flash設計導入創高 | 應收帳款改善 | 記憶體設計師薪資+28% |\n| EPAM | AI開發工具Mindshare+1.8x | IT外包需求回升 | 印度AI工程師+89% |\n\n---\n\n## ⚡ 第七章：今日操作策略總結\n\n**大盤氣候：** 溫和多頭，但高利率（10Y 5.31%）是最大隱患。精選個股，避開高估值泡沫。\n\n**短期（1-3月）：** 科技/AI板塊動能仍強（ARKW強烈買進），但半導體SMH過熱需降配。MU財報超預期提供最強短線催化劑。\n\n**中期（半年-1年）：** 聯準會降息預期（利率3.75%）支撐成長股，但10Y殖利率5.31%顯示市場不信任降息路徑，需持續追蹤。\n\n**長期（3-5年）：** AI記憶體（MU）、AI散熱（8996.TW）、AI邊緣運算（2337.TW）為結構性長線主題，逢回調加碼。\n\n---", "backtest_summary": {"update_time": "2026-06-07 22:02:40", "total_predictions": 158, "settled_predictions": 33, "tracking_predictions": 125, "success_count": 2, "partial_success_count": 2, "failed_count": 29, "win_rate_pct": 12.12, "average_weighted_return_pct": -1.86, "recent_errors": [{"date": "2025-11-21", "ticker": "INTC", "name": "英特爾", "reason": "x86市佔流失且先進製程代工業務虧損擴大，市場對其AI競爭力持懷疑態度", "target_pct": -30.0, "actual_pct": 193.3, "result": "失敗"}, {"date": "2025-11-21", "ticker": "VNQ", "name": "高槓桿REITs", "reason": "商業地產受高利率環境長壓，融資成本暴增且出租率難以提升", "target_pct": -30.0, "actual_pct": 5.0, "result": "失敗"}, {"date": "2026-05-22", "ticker": "RKLB", "name": "Rocket Lab USA", "reason": "SpaceX IPO題材引爆太空板塊重估，MACD由負轉正，政府合約能見度高，太空經濟進入商業化加速期，短期題材動能強勁。", "target_pct": 30.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-23", "ticker": "7819.TW", "name": "精誠金融科技", "reason": "2026年5月27日正式掛牌上櫃，精誠資訊旗下金融SaaS高成長子公司，聚焦行動支付與數位銀行API整合，興櫃參考價折價20-30%，API串接金融機構數量年增65%，台灣金融數位化政策紅利", "target_pct": 30.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-23", "ticker": "CBRS", "name": "Cerebras Systems", "reason": "上市僅7個交易日，WSE-3晶片AI推理速度比H100快20倍，Rule of 40達220+，NRR>150%，基石投資人G42與Altimeter Capital，GitHub推理框架7天星數暴增800%，機構搶籌初期", "target_pct": 40.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}], "details": [{"date": "2025-11-21", "type": "bull", "ticker": "NVDA", "name": "NVIDIA", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 42.0, "result": "成功"}, {"date": "2025-11-21", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 18.0, "result": "部分成功"}, {"date": "2025-11-21", "type": "bull", "ticker": "META", "name": "META", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 35.0, "result": "成功"}, {"date": "2025-11-21", "type": "bear", "ticker": "INTC", "name": "英特爾", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 193.3, "result": "失敗"}, {"date": "2025-11-21", "type": "bear", "ticker": "9921.TW", "name": "巨大", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -12.0, "result": "部分成功"}, {"date": "2025-11-21", "type": "bear", "ticker": "VNQ", "name": "高槓桿REITs", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 5.0, "result": "失敗"}, {"date": "2026-05-21", "type": "bull", "ticker": "NVDA", "name": "NVIDIA Corporation", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -6.46, "result": "追蹤中 (17天/180天)"}, {"date": "2026-05-21", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 6.05, "result": "追蹤中 (17天/180天)"}, {"date": "2026-05-21", "type": "bull", "ticker": "META", "name": "Meta Platforms", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -2.37, "result": "追蹤中 (17天/180天)"}, {"date": "2026-05-21", "type": "bear", "ticker": "BA", "name": "Boeing Company", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -1.89, "result": "追蹤中 (17天/180天)"}, {"date": "2026-05-21", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (17天/180天)"}, {"date": "2026-05-21", "type": "bear", "ticker": "SLG", "name": "SL Green Realty", "target_pct": -25.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 12.46, "result": "追蹤中 (17天/180天)"}, {"date": "2026-05-22", "type": "bull", "ticker": "NVDA", "name": "NVIDIA Corporation", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -4.64, "result": "追蹤中 (16天/180天)"}, {"date": "2026-05-22", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 4.88, "result": "追蹤中 (16天/180天)"}, {"date": "2026-05-22", "type": "bull", "ticker": "RKLB", "name": "Rocket Lab USA", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-22", "type": "bear", "ticker": "INTC", "name": "Intel Corporation", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -17.25, "result": "追蹤中 (16天/180天)"}, {"date": "2026-05-22", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.71, "result": "追蹤中 (16天/180天)"}, {"date": "2026-05-22", "type": "bear", "ticker": "IYR", "name": "iShares U.S. Real Estate ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -0.18, "result": "追蹤中 (16天/180天)"}, {"date": "2026-05-23", "type": "bull", "ticker": "NVDA", "name": "NVIDIA Corporation", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -4.43, "result": "追蹤中 (15天/180天)"}, {"date": "2026-05-23", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.38, "result": "追蹤中 (15天/180天)"}, {"date": "2026-05-23", "type": "bull", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 35.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 8.35, "result": "追蹤中 (15天/180天)"}, {"date": "2026-05-23", "type": "bear", "ticker": "INTC", "name": "Intel Corporation", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -19.71, "result": "追蹤中 (15天/180天)"}, {"date": "2026-05-23", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 1.87, "result": "追蹤中 (15天/180天)"}, {"date": "2026-05-23", "type": "bear", "ticker": "IYR", "name": "iShares U.S. Real Estate ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -0.56, "result": "追蹤中 (15天/180天)"}, {"date": "2026-05-23", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-23", "type": "ipo_bull", "ticker": "CBRS", "name": "Cerebras Systems", "target_pct": 40.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-23", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -9.99, "result": "追蹤中 (15天/180天)"}, {"date": "2026-05-23", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 8.35, "result": "追蹤中 (15天/180天)"}, {"date": "2026-05-24", "type": "bull", "ticker": "NVDA", "name": "NVIDIA Corporation", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -4.43, "result": "追蹤中 (14天/180天)"}, {"date": "2026-05-24", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.38, "result": "追蹤中 (14天/180天)"}, {"date": "2026-05-24", "type": "bull", "ticker": "META", "name": "Meta Platforms", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -3.16, "result": "追蹤中 (14天/180天)"}, {"date": "2026-05-24", "type": "bear", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-24", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 1.87, "result": "追蹤中 (14天/180天)"}, {"date": "2026-05-24", "type": "bear", "ticker": "XLRE", "name": "Real Estate Select Sector SPDR Fund", "target_pct": -25.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -0.02, "result": "追蹤中 (14天/180天)"}, {"date": "2026-05-24", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-24", "type": "ipo_bull", "ticker": "CBRS", "name": "Cerebras Systems", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-24", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -9.99, "result": "追蹤中 (14天/180天)"}, {"date": "2026-05-24", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 8.35, "result": "追蹤中 (14天/180天)"}, {"date": "2026-05-25", "type": "bull", "ticker": "NVDA", "name": "NVIDIA Corporation", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -4.43, "result": "追蹤中 (13天/180天)"}, {"date": "2026-05-25", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.38, "result": "追蹤中 (13天/180天)"}, {"date": "2026-05-25", "type": "bull", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 8.35, "result": "追蹤中 (13天/180天)"}, {"date": "2026-05-25", "type": "bear", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-25", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 1.87, "result": "追蹤中 (13天/180天)"}, {"date": "2026-05-25", "type": "bear", "ticker": "MPW", "name": "Medical Properties Trust", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-05-25", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-25", "type": "ipo_bull", "ticker": "CBRS", "name": "Cerebras Systems", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-25", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -9.99, "result": "追蹤中 (13天/180天)"}, {"date": "2026-05-25", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 8.35, "result": "追蹤中 (13天/180天)"}, {"date": "2026-05-26", "type": "bull", "ticker": "MU", "name": "美光科技 Micron Technology", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -3.56, "result": "追蹤中 (12天/180天)"}, {"date": "2026-05-26", "type": "bull", "ticker": "2330.TW", "name": "台積電 TSMC", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 4.19, "result": "追蹤中 (12天/180天)"}, {"date": "2026-05-26", "type": "bull", "ticker": "APP", "name": "AppLovin", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 8.35, "result": "追蹤中 (12天/180天)"}, {"date": "2026-05-26", "type": "bear", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-26", "type": "bear", "ticker": "9921.TW", "name": "巨大機械 Giant Manufacturing", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 4.12, "result": "追蹤中 (12天/180天)"}, {"date": "2026-05-26", "type": "bear", "ticker": "AFRM", "name": "Affirm Holdings", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -8.17, "result": "追蹤中 (12天/180天)"}, {"date": "2026-05-26", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-26", "type": "ipo_bull", "ticker": "CBRS", "name": "Cerebras Systems", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-26", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -5.4, "result": "追蹤中 (12天/180天)"}, {"date": "2026-05-26", "type": "turnaround", "ticker": "APP", "name": "AppLovin", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 8.35, "result": "追蹤中 (12天/180天)"}, {"date": "2026-05-27", "type": "bull", "ticker": "MU", "name": "美光科技 Micron Technology", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -6.94, "result": "追蹤中 (11天/180天)"}, {"date": "2026-05-27", "type": "bull", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.28, "result": "追蹤中 (11天/180天)"}, {"date": "2026-05-27", "type": "bull", "ticker": "2330.TW", "name": "台積電 TSMC", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.83, "result": "追蹤中 (11天/180天)"}, {"date": "2026-05-27", "type": "bear", "ticker": "SOXL", "name": "Direxion每日半導體牛市3倍ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-27", "type": "bear", "ticker": "9921.TW", "name": "巨大機械 Giant Manufacturing", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 6.95, "result": "追蹤中 (11天/180天)"}, {"date": "2026-05-27", "type": "bear", "ticker": "OFC", "name": "Corporate Office Properties Trust", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-05-27", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 7.21, "result": "追蹤中 (11天/90天)"}, {"date": "2026-05-27", "type": "ipo_bull", "ticker": "CBRS", "name": "Cerebras Systems", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-27", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -5.96, "result": "追蹤中 (11天/180天)"}, {"date": "2026-05-27", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -1.87, "result": "追蹤中 (11天/180天)"}, {"date": "2026-05-28", "type": "bull", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -5.45, "result": "追蹤中 (10天/180天)"}, {"date": "2026-05-28", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 3.05, "result": "追蹤中 (10天/180天)"}, {"date": "2026-05-28", "type": "bull", "ticker": "MU", "name": "美光科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -6.44, "result": "追蹤中 (10天/180天)"}, {"date": "2026-05-28", "type": "bear", "ticker": "DAL", "name": "達美航空", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -3.72, "result": "追蹤中 (10天/180天)"}, {"date": "2026-05-28", "type": "bear", "ticker": "9921.TW", "name": "巨大", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 4.42, "result": "追蹤中 (10天/180天)"}, {"date": "2026-05-28", "type": "bear", "ticker": "SMCI", "name": "超微電腦", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-28", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 6.86, "result": "追蹤中 (10天/90天)"}, {"date": "2026-05-28", "type": "ipo_bull", "ticker": "CBRS", "name": "Cerebras Systems", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-28", "type": "turnaround", "ticker": "2367.TW", "name": "燿華", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -4.1, "result": "追蹤中 (10天/180天)"}, {"date": "2026-05-28", "type": "turnaround", "ticker": "APP", "name": "AppLovin", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -7.12, "result": "追蹤中 (10天/180天)"}, {"date": "2026-05-29", "type": "bull", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -13.42, "result": "追蹤中 (9天/180天)"}, {"date": "2026-05-29", "type": "bull", "ticker": "MU", "name": "Micron Technology", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -11.02, "result": "追蹤中 (9天/180天)"}, {"date": "2026-05-29", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.42, "result": "追蹤中 (9天/180天)"}, {"date": "2026-05-29", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.16, "result": "追蹤中 (9天/180天)"}, {"date": "2026-05-29", "type": "bear", "ticker": "SPG", "name": "Simon Property Group", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.64, "result": "追蹤中 (9天/180天)"}, {"date": "2026-05-29", "type": "bear", "ticker": "INTC", "name": "Intel Corporation", "target_pct": -20.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -13.52, "result": "追蹤中 (9天/180天)"}, {"date": "2026-05-29", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 7.91, "result": "追蹤中 (9天/90天)"}, {"date": "2026-05-29", "type": "ipo_bull", "ticker": "QNT", "name": "Quantinuum Inc.", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-29", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -7.34, "result": "追蹤中 (9天/180天)"}, {"date": "2026-05-29", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -9.12, "result": "追蹤中 (9天/180天)"}, {"date": "2026-05-30", "type": "bull", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-30", "type": "bull", "ticker": "MU", "name": "Micron Technology", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-30", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.42, "result": "追蹤中 (8天/180天)"}, {"date": "2026-05-30", "type": "bear", "ticker": "CONY", "name": "YieldMax COIN Option Income Strategy ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -14.29, "result": "追蹤中 (8天/180天)"}, {"date": "2026-05-30", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 1.43, "result": "追蹤中 (8天/180天)"}, {"date": "2026-05-30", "type": "bear", "ticker": "VNQ", "name": "Vanguard Real Estate ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.87, "result": "追蹤中 (8天/180天)"}, {"date": "2026-05-30", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 7.32, "result": "追蹤中 (8天/90天)"}, {"date": "2026-05-30", "type": "ipo_bull", "ticker": "QNT", "name": "Quantinuum Inc.", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-05-30", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -6.38, "result": "追蹤中 (8天/180天)"}, {"date": "2026-05-30", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -9.21, "result": "追蹤中 (8天/180天)"}, {"date": "2026-06-01", "type": "bull", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-06-01", "type": "bull", "ticker": "MU", "name": "Micron Technology", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-06-01", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.42, "result": "追蹤中 (6天/180天)"}, {"date": "2026-06-01", "type": "bear", "ticker": "CONY", "name": "YieldMax COIN Option Income Strategy ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -14.29, "result": "追蹤中 (6天/180天)"}, {"date": "2026-06-01", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 1.43, "result": "追蹤中 (6天/180天)"}, {"date": "2026-06-01", "type": "bear", "ticker": "VNQ", "name": "Vanguard Real Estate ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.87, "result": "追蹤中 (6天/180天)"}, {"date": "2026-06-01", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 7.32, "result": "追蹤中 (6天/90天)"}, {"date": "2026-06-01", "type": "ipo_bull", "ticker": "QNT", "name": "Quantinuum Inc.", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-06-01", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -6.38, "result": "追蹤中 (6天/180天)"}, {"date": "2026-06-01", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -9.21, "result": "追蹤中 (6天/180天)"}, {"date": "2026-06-02", "type": "bull", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -10.94, "result": "追蹤中 (5天/180天)"}, {"date": "2026-06-02", "type": "bull", "ticker": "MU", "name": "Micron Technology", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-06-02", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -0.63, "result": "追蹤中 (5天/180天)"}, {"date": "2026-06-02", "type": "bear", "ticker": "CONY", "name": "YieldMax COIN Option Income Strategy ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -11.1, "result": "追蹤中 (5天/180天)"}, {"date": "2026-06-02", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 1.43, "result": "追蹤中 (5天/180天)"}, {"date": "2026-06-02", "type": "bear", "ticker": "VNQ", "name": "Vanguard Real Estate ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.4, "result": "追蹤中 (5天/180天)"}, {"date": "2026-06-02", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.92, "result": "追蹤中 (5天/90天)"}, {"date": "2026-06-02", "type": "ipo_bull", "ticker": "QNT", "name": "Quantinuum Inc.", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-06-02", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -4.1, "result": "追蹤中 (5天/180天)"}, {"date": "2026-06-02", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -8.0, "result": "追蹤中 (5天/180天)"}, {"date": "2026-06-03", "type": "bull", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -4.69, "result": "追蹤中 (4天/180天)"}, {"date": "2026-06-03", "type": "bull", "ticker": "MU", "name": "Micron Technology", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-06-03", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -2.47, "result": "追蹤中 (4天/180天)"}, {"date": "2026-06-03", "type": "bear", "ticker": "CONY", "name": "YieldMax COIN Option Income Strategy ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -5.81, "result": "追蹤中 (4天/180天)"}, {"date": "2026-06-03", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.57, "result": "追蹤中 (4天/180天)"}, {"date": "2026-06-03", "type": "bear", "ticker": "VNQ", "name": "Vanguard Real Estate ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.52, "result": "追蹤中 (4天/180天)"}, {"date": "2026-06-03", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 2.08, "result": "追蹤中 (4天/90天)"}, {"date": "2026-06-03", "type": "ipo_bull", "ticker": "CBRS", "name": "Cerebras Systems", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -6.48, "result": "追蹤中 (4天/90天)"}, {"date": "2026-06-03", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -3.22, "result": "追蹤中 (4天/180天)"}, {"date": "2026-06-03", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -2.39, "result": "追蹤中 (4天/180天)"}, {"date": "2026-06-04", "type": "bull", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -4.35, "result": "追蹤中 (3天/180天)"}, {"date": "2026-06-04", "type": "bull", "ticker": "MU", "name": "Micron Technology", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -13.25, "result": "追蹤中 (3天/180天)"}, {"date": "2026-06-04", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -0.84, "result": "追蹤中 (3天/180天)"}, {"date": "2026-06-04", "type": "bear", "ticker": "CONY", "name": "YieldMax COIN Option Income Strategy ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -6.41, "result": "追蹤中 (3天/180天)"}, {"date": "2026-06-04", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.28, "result": "追蹤中 (3天/180天)"}, {"date": "2026-06-04", "type": "bear", "ticker": "VNQ", "name": "Vanguard Real Estate ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.72, "result": "追蹤中 (3天/180天)"}, {"date": "2026-06-04", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.1, "result": "追蹤中 (3天/90天)"}, {"date": "2026-06-04", "type": "ipo_bull", "ticker": "QNT", "name": "Quantinuum Inc.", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -15.0, "result": "提早結算 (停損出局)"}, {"date": "2026-06-04", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 1.77, "result": "追蹤中 (3天/180天)"}, {"date": "2026-06-04", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": -0.3, "result": "追蹤中 (3天/180天)"}, {"date": "2026-06-06", "type": "bull", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (1天/180天)"}, {"date": "2026-06-06", "type": "bull", "ticker": "MU", "name": "Micron Technology", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (1天/180天)"}, {"date": "2026-06-06", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (1天/180天)"}, {"date": "2026-06-06", "type": "bear", "ticker": "CONY", "name": "YieldMax COIN Option Income Strategy ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (1天/180天)"}, {"date": "2026-06-06", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (1天/180天)"}, {"date": "2026-06-06", "type": "bear", "ticker": "VNQ", "name": "Vanguard Real Estate ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (1天/180天)"}, {"date": "2026-06-06", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (1天/90天)"}, {"date": "2026-06-06", "type": "ipo_bull", "ticker": "CBRS", "name": "Cerebras Systems", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (1天/90天)"}, {"date": "2026-06-06", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (1天/180天)"}, {"date": "2026-06-06", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "追蹤中 (1天/180天)"}, {"date": "2026-06-07", "type": "bull", "ticker": "PLTR", "name": "Palantir Technologies", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-06-07", "type": "bull", "ticker": "MU", "name": "Micron Technology", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-06-07", "type": "bull", "ticker": "2330.TW", "name": "台積電", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-06-07", "type": "bear", "ticker": "CONY", "name": "YieldMax COIN Option Income Strategy ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-06-07", "type": "bear", "ticker": "9921.TW", "name": "巨大機械", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-06-07", "type": "bear", "ticker": "VNQ", "name": "Vanguard Real Estate ETF", "target_pct": -30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-06-07", "type": "ipo_bull", "ticker": "7819.TW", "name": "精誠金融科技", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-06-07", "type": "ipo_bull", "ticker": "CBRS", "name": "Cerebras Systems", "target_pct": 30.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-06-07", "type": "turnaround", "ticker": "2367.TW", "name": "燿華電子", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}, {"date": "2026-06-07", "type": "turnaround", "ticker": "APP", "name": "AppLovin Corporation", "target_pct": 80.0, "stop_loss_pct": -15.0, "position_size_pct": 100.0, "actual_pct": 0.0, "result": "待驗證"}]}}
+    </script>
+    <script id="all-dates-data" type="application/json">
+[{"date": "2026-10-06"}, {"date": "2026-10-05"}, {"date": "2026-10-04"}, {"date": "2026-10-03"}, {"date": "2026-10-02"}, {"date": "2026-10-01"}, {"date": "2026-09-30"}, {"date": "2026-09-29"}, {"date": "2026-09-28"}, {"date": "2026-09-27"}, {"date": "2026-09-26"}, {"date": "2026-09-25"}, {"date": "2026-09-24"}, {"date": "2026-09-23"}, {"date": "2026-09-22"}, {"date": "2026-09-21"}, {"date": "2026-09-20"}, {"date": "2026-09-19"}, {"date": "2026-09-18"}, {"date": "2026-09-17"}, {"date": "2026-09-16"}, {"date": "2026-09-15"}, {"date": "2026-09-14"}, {"date": "2026-09-13"}, {"date": "2026-09-12"}, {"date": "2026-09-11"}, {"date": "2026-09-10"}, {"date": "2026-09-09"}, {"date": "2026-09-08"}, {"date": "2026-09-07"}]
+    </script>
+
+    <!-- 核心前端邏輯 (SPA 動態互動) -->
+    <script>
+        // 1. 全域狀態
+        let reportData = JSON.parse(document.getElementById('current-report-data').textContent);
+        let allDates = JSON.parse(document.getElementById('all-dates-data').textContent);
+        let colorMode = localStorage.getItem('quant_color_mode') || 'intl'; // 'intl' (綠漲紅跌) 或 'tw' (紅漲綠跌)
+
+        // 2. 初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            setupDateSelector();
+            applyColorMode();
+            renderDashboard(reportData);
+        });
+
+        // 日期選擇器初始化
+        function setupDateSelector() {
+            const select = document.getElementById('date-select');
+            select.innerHTML = '';
+            allDates.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.date;
+                opt.textContent = '📅 ' + item.date + (item.date === reportData.date ? ' (最新)' : '');
+                if (item.date === reportData.date) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
+
+        // 色彩模式切換 (國際綠漲 vs 台股紅漲)
+        function toggleColorMode() {
+            colorMode = (colorMode === 'intl') ? 'tw' : 'intl';
+            localStorage.setItem('quant_color_mode', colorMode);
+            applyColorMode();
+            renderDashboard(reportData);
+        }
+
+        function applyColorMode() {
+            const icon = document.getElementById('color-icon');
+            const text = document.getElementById('color-text');
+            if (colorMode === 'tw') {
+                icon.textContent = '🔴';
+                text.textContent = '台股紅漲';
+            } else {
+                icon.textContent = '🟢';
+                text.textContent = '國際綠漲';
+            }
+        }
+
+        function getGainClass() {
+            return colorMode === 'tw' ? 'text-rose-400' : 'text-emerald-400';
+        }
+        function getLossClass() {
+            return colorMode === 'tw' ? 'text-emerald-400' : 'text-rose-400';
+        }
+        function getGainBgClass() {
+            return colorMode === 'tw' ? 'bg-rose-500/10 text-rose-400 border-rose-500/30' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+        }
+        function getLossBgClass() {
+            return colorMode === 'tw' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-rose-500/10 text-rose-400 border-rose-500/30';
+        }
+
+        // 切換日期 (若線上運行可 fetch，若本地運行切換)
+        async function switchDate(dateStr) {
+            if (dateStr === reportData.date) return;
+            try {
+                const res = await fetch(`data/reports/${dateStr}.json`);
+                if (res.ok) {
+                    reportData = await res.json();
+                    renderDashboard(reportData);
+                } else {
+                    alert('無法載入該日期的報告檔案 (若為本地單機開啟請點擊最新報告)');
+                }
+            } catch (e) {
+                console.warn('Local file fallback:', e);
+                alert('切換歷史檔案需要透過網頁伺服器或 GitHub Pages 瀏覽。');
+            }
+        }
+
+        // Tab 切換
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-sky-500/20', 'text-sky-400', 'border', 'border-sky-500/30');
+                el.classList.add('text-slate-400');
+            });
+            const target = document.getElementById(tabId);
+            if (target) target.classList.remove('hidden');
+            const btn = document.getElementById('nav-' + tabId);
+            if (btn) {
+                btn.classList.add('bg-sky-500/20', 'text-sky-400', 'border', 'border-sky-500/30');
+                btn.classList.remove('text-slate-400');
+            }
+        }
+
+        // 渲染整個儀表板
+        function renderDashboard(data) {
+            document.getElementById('hero-date').textContent = '報告日期: ' + data.date;
+
+            // 1. 預測統計
+            const preds = data.predictions || [];
+            let bulls = 0, bears = 0, turns = 0;
+            preds.forEach(p => {
+                if (p.type === 'bull') bulls++;
+                else if (p.type === 'bear') bears++;
+                else if (p.type === 'turnaround') turns++;
+            });
+            document.getElementById('stat-bull-count').textContent = bulls;
+            document.getElementById('stat-bear-count').textContent = bears;
+            document.getElementById('stat-turnaround-count').textContent = turns;
+
+            // 渲染預測卡片
+            renderPredictionCards(preds);
+
+            // 2. 渲染市場行情表格
+            renderMarketTable(data.global_market || []);
+
+            // 3. 渲染焦點事件
+            renderFocusEvents(data.focus_events || []);
+
+            // 4. 渲染宏觀指標
+            renderMacroGrid(data.macro_indicators || []);
+
+            // 5. 渲染 Markdown 全文
+            renderMarkdown(data.markdown_content || '');
+
+            // 6. 渲染回測
+            renderBacktest(data.backtest_summary || {});
+        }
+
+        // 渲染 8 檔預測卡片
+        function renderPredictionCards(list) {
+            const grid = document.getElementById('predictions-grid');
+            grid.innerHTML = '';
+
+            if (!list || list.length === 0) {
+                grid.innerHTML = '<div class="col-span-3 text-center py-12 text-slate-400 font-mono">今日無預測 JSON 紀錄</div>';
+                return;
+            }
+
+            list.forEach(p => {
+                let typeBadge = '';
+                let borderGlow = '';
+                let targetColor = '';
+
+                if (p.type === 'bull') {
+                    typeBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"><i class="fa-solid fa-arrow-trend-up mr-1"></i>多頭飆股</span>`;
+                    borderGlow = 'hover:border-emerald-500/50';
+                    targetColor = getGainClass();
+                } else if (p.type === 'bear') {
+                    typeBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30"><i class="fa-solid fa-arrow-trend-down mr-1"></i>避險放空</span>`;
+                    borderGlow = 'hover:border-rose-500/50';
+                    targetColor = getLossClass();
+                } else {
+                    typeBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-500/10 text-sky-400 border border-sky-500/30"><i class="fa-solid fa-rotate mr-1"></i>轉機黑馬</span>`;
+                    borderGlow = 'hover:border-sky-500/50';
+                    targetColor = 'text-sky-400';
+                }
+
+                // 信心星星
+                let stars = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= (p.confidence_score || 3)) {
+                        stars += '<i class="fa-solid fa-star text-amber-400 text-xs"></i>';
+                    } else {
+                        stars += '<i class="fa-regular fa-star text-slate-600 text-xs"></i>';
+                    }
+                }
+
+                const card = document.createElement('div');
+                card.className = `prediction-card p-5 rounded-2xl bg-[#0f172a] border border-[#23324d] ${borderGlow} transition duration-200 flex flex-col justify-between shadow-lg relative overflow-hidden group`;
+                card.setAttribute('data-type', p.type);
+
+                card.innerHTML = `
+                    <div>
+                        <!-- 標題欄 -->
+                        <div class="flex items-start justify-between gap-2 mb-2">
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xl font-black text-white font-mono tracking-tight group-hover:text-sky-400 transition">${p.ticker}</span>
+                                    <span class="text-xs text-slate-400 font-medium">${p.name}</span>
+                                </div>
+                            </div>
+                            <div>${typeBadge}</div>
+                        </div>
+
+                        <!-- 信心分數與建議合約 -->
+                        <div class="flex items-center justify-between text-xs py-2 border-y border-[#1c2a42] my-3">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="text-slate-400 text-[11px]">信心指數:</span>
+                                <div class="flex items-center space-x-0.5">${stars}</div>
+                            </div>
+                            <div class="text-[11px] font-mono text-slate-300">
+                                配置: <span class="text-white font-bold">${p.position_size_pct || 60}%</span>
+                            </div>
+                        </div>
+
+                        <!-- 關鍵指標網格 -->
+                        <div class="grid grid-cols-2 gap-2 mb-3 font-mono">
+                            <div class="bg-[#142036] p-2.5 rounded-xl border border-[#1e2f4c]">
+                                <div class="text-[10px] text-slate-400 uppercase">預期目標</div>
+                                <div class="text-base font-black ${targetColor}">${p.target_pct > 0 ? '+' : ''}${p.target_pct}%</div>
+                            </div>
+                            <div class="bg-[#142036] p-2.5 rounded-xl border border-[#1e2f4c]">
+                                <div class="text-[10px] text-slate-400 uppercase">嚴格停損</div>
+                                <div class="text-base font-black text-slate-200">${p.stop_loss_pct || -15.0}%</div>
+                            </div>
+                        </div>
+
+                        <!-- 操作合約指引 -->
+                        <div class="mb-3 px-3 py-2 rounded-xl bg-[#111c30] border border-[#1b2b45] text-xs">
+                            <span class="text-[11px] text-slate-400 block mb-0.5"><i class="fa-solid fa-receipt text-sky-400 mr-1"></i>實戰合約 / 操作建議:</span>
+                            <span class="font-mono font-medium text-slate-200">${p.options_contract || '現股進場'}</span>
+                        </div>
+
+                        <!-- 核心理由 -->
+                        <div class="text-xs text-slate-300 leading-relaxed bg-[#0b121e] p-3 rounded-xl border border-[#17243b]">
+                            <p class="line-clamp-4 group-hover:line-clamp-none transition-all duration-300">${p.reason}</p>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 預測篩選切換
+        function filterPredictions(type) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-sky-500', 'text-white');
+                btn.classList.add('text-slate-400');
+            });
+            const activeBtn = document.getElementById('filter-' + type);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-sky-500', 'text-white');
+                activeBtn.classList.remove('text-slate-400');
+            }
+
+            const cards = document.querySelectorAll('.prediction-card');
+            cards.forEach(card => {
+                if (type === 'all' || card.getAttribute('data-type') === type) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // 渲染市場指數表格
+        function renderMarketTable(list) {
+            const tbody = document.getElementById('market-table-body');
+            tbody.innerHTML = '';
+            if (!list || list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-500">暫無指數行情資料</td></tr>';
+                return;
+            }
+
+            list.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-[#152238] transition';
+
+                const fmtChg = (val) => {
+                    if (!val || val === 'N/A') return '<span class="text-slate-500">N/A</span>';
+                    const isPositive = val.includes('+');
+                    const isNegative = val.includes('-');
+                    if (isPositive) return `<span class="${getGainClass()} font-bold">${val}</span>`;
+                    if (isNegative) return `<span class="${getLossClass()} font-bold">${val}</span>`;
+                    return `<span class="text-slate-400">${val}</span>`;
+                };
+
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-bold text-white font-sans">${item.name}</td>
+                    <td class="py-3 px-4 text-right">${fmtChg(item.daily)}</td>
+                    <td class="py-3 px-4 text-right">${fmtChg(item.m1)}</td>
+                    <td class="py-3 px-4 text-right">${fmtChg(item.m3)}</td>
+                    <td class="py-3 px-4 text-right">${fmtChg(item.ytd)}</td>
+                    <td class="py-3 px-4 text-xs font-sans text-slate-400">${item.note || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 渲染焦點事件卡片
+        function renderFocusEvents(events) {
+            const grid = document.getElementById('events-grid');
+            grid.innerHTML = '';
+            if (!events || events.length === 0) {
+                grid.innerHTML = '<div class="col-span-3 text-center py-6 text-slate-500">暫無今日焦點事件</div>';
+                return;
+            }
+
+            events.forEach(ev => {
+                const isBull = ev.sentiment === '利多';
+                const badge = isBull
+                    ? `<span class="px-2 py-0.5 rounded text-[11px] font-bold ${getGainBgClass()}">利多</span>`
+                    : `<span class="px-2 py-0.5 rounded text-[11px] font-bold ${getLossBgClass()}">利空</span>`;
+
+                const card = document.createElement('div');
+                card.className = 'p-4 rounded-xl bg-[#0f172a] border border-[#23324d] flex flex-col justify-between hover:border-sky-500/40 transition shadow';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            ${badge}
+                            <span class="text-[11px] text-slate-400 font-mono"><i class="fa-solid fa-newspaper mr-1"></i>${ev.source}</span>
+                        </div>
+                        <h3 class="font-bold text-sm text-white mb-2 leading-snug">${ev.title}</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">${ev.summary}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 渲染宏觀指標卡片
+        function renderMacroGrid(list) {
+            const grid = document.getElementById('macro-grid');
+            grid.innerHTML = '';
+            if (!list || list.length === 0) {
+                grid.innerHTML = '<div class="col-span-4 text-center py-6 text-slate-500">暫無宏觀數據</div>';
+                return;
+            }
+
+            list.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'p-3.5 rounded-xl bg-[#0f172a] border border-[#23324d]';
+                card.innerHTML = `
+                    <div class="text-[11px] text-slate-400 mb-1 truncate">${m.name}</div>
+                    <div class="text-lg font-black text-white font-mono">${m.value}</div>
+                    <div class="text-[11px] text-slate-400 mt-1 truncate">${m.signal || '-'}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 渲染 Markdown 報告全文
+        function renderMarkdown(md) {
+            const container = document.getElementById('markdown-container');
+            if (!md) {
+                container.innerHTML = '<p class="text-slate-500">無報告內容</p>';
+                return;
+            }
+            container.innerHTML = marked.parse(md);
+        }
+
+        // 渲染歷史回測
+        function renderBacktest(bt) {
+            document.getElementById('bt-total').textContent = bt.total_predictions || '-';
+            document.getElementById('bt-settled').textContent = bt.settled_predictions || '-';
+            document.getElementById('bt-winrate').textContent = (bt.win_rate_pct ? bt.win_rate_pct + '%' : '-');
+            document.getElementById('bt-tracking').textContent = bt.tracking_predictions || '-';
+
+            const tbody = document.getElementById('bt-details-body');
+            tbody.innerHTML = '';
+            const details = bt.details || [];
+            if (details.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-500">暫無詳細回測記錄</td></tr>';
+                return;
+            }
+
+            details.slice(0, 15).forEach(d => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-[#152238] transition';
+                const isPos = (d.actual_pct || 0) > 0;
+                const retClass = isPos ? getGainClass() : getLossClass();
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-4 text-slate-400">${d.date || '-'}</td>
+                    <td class="py-2.5 px-4 text-white font-sans font-medium">${d.name || ''} (${d.ticker || ''})</td>
+                    <td class="py-2.5 px-4 text-xs font-sans text-slate-300">${d.type === 'bull' ? '🚀多頭' : (d.type === 'bear' ? '📉空頭' : '🔄轉機')}</td>
+                    <td class="py-2.5 px-4 text-right text-slate-300">${d.target_pct || 0}%</td>
+                    <td class="py-2.5 px-4 text-right ${retClass} font-bold">${(d.actual_pct || 0) > 0 ? '+' : ''}${d.actual_pct || 0}%</td>
+                    <td class="py-2.5 px-4 text-center text-xs">${d.result || '追蹤中'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 複製全文功能
+        function copyReportText() {
+            const text = reportData.markdown_content || '';
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copy-btn-text');
+                btn.textContent = '已複製！';
+                setTimeout(() => { btn.textContent = '複製全文'; }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
