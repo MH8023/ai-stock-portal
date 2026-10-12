@@ -13,7 +13,7 @@
       "position_size_pct": 80.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 1029.0,
+      "current_price": 989.91,
       "price_date": "2026-10-12"
     },
     {
@@ -43,7 +43,7 @@
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 104.7,
+      "current_price": 101.75,
       "price_date": "2026-10-12"
     },
     {
@@ -58,7 +58,7 @@
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 242.27,
+      "current_price": 237.74,
       "price_date": "2026-10-12"
     },
     {
@@ -73,7 +73,7 @@
       "position_size_pct": 80.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 101.27,
+      "current_price": 98.56,
       "price_date": "2026-10-12"
     },
     {
@@ -118,7 +118,7 @@
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 113.24,
+      "current_price": 114.03,
       "price_date": "2026-10-12"
     }
   ],
@@ -127,31 +127,31 @@
       "category": "原物料",
       "icon": "fa-solid fa-oil-well",
       "color": "amber",
-      "title": "大型藥廠獲關稅豁免，生技股分化",
-      "sentiment": "中性",
-      "summary": "摘要：大型製藥公司獲得關稅豁免，但中小型生技股未獲同等待遇，板塊內部出現明顯分化。",
-      "source": "市場頭條（*Big Pharma Got Its Tariff Exemption. The Biotech...*）",
-      "url": "https://finance.yahoo.com",
-      "time": "2026-10-12 05:30 EST"
+      "title": "WTI 原油收報 $92.30、COMEX 黃金突破 $4,216 創歷史天價，實體大宗商品呈現強烈避險對衝",
+      "sentiment": "中性偏多",
+      "summary": "大宗商品市場呈現結構性多頭分化。受中東荷莫茲海峽航運地緣風險溢價與 OPEC+ 成員國嚴格維持減產配額支撐，WTI 原油期貨收盤報每桶 $92.30 美元，美國能源部戰略石油儲備（SPR）招標回補形成底部強勁防線。同時，COMEX 黃金期貨強勢突破每盎司 $4,216 美元刷新歷史紀錄，全球各國央行實物黃金增持儲備規模年增 38%，展現對抗主權信用法幣貶值之強烈戰略對衝意願。LME 銅價亦報每磅 $6.71/lb，反映全球 AI 算力資料中心與電網升級所帶動之剛性工業金屬用量爆發。",
+      "source": "Bloomberg Commodities",
+      "url": "https://www.bloomberg.com/energy",
+      "time": "2026-10-12 05:00 EST"
     },
     {
       "category": "地緣政治",
       "icon": "fa-solid fa-earth-americas",
       "color": "purple",
-      "title": "Alphabet大漲3%，白宮反壟斷態度軟化",
-      "sentiment": "利多",
-      "summary": "摘要：市場傳出白宮對Google搜尋壟斷案可能採取較溫和的補救措施，Alphabet股價單日跳漲3%，帶動科技板塊情緒回暖。",
-      "source": "CNBC（*Alphabet Rallies 3% as Traders Weigh White House...*）",
-      "url": "https://www.cnbc.com",
-      "time": "2026-10-12 05:30 EST"
+      "title": "紅海航道戰略警戒升級，美歐針對關鍵 AI 與半導體先進封裝頒布跨國出口安全新規",
+      "sentiment": "利空",
+      "summary": "全球地緣政治板塊摩擦加劇。中東紅海與亞丁灣航道商船保險費率暴增 140%，部分油輪與貨櫃航線被迫繞行非洲好望角，推升全球海運週期與進口成本壓力。路透社引述白宮國安會官員發言指出，跨大西洋盟友已敲定新一輪先進晶片與晶圓製造設備出口合規審查框架，針對先進製程 EDA 軟體與先進封裝關鍵材料實施端對端最終用途驗證機制。地緣戰略摩擦導致跨國企業資本支出向近岸外包（Near-shoring）傾斜，全球供應鏈主權風險溢價正加速嵌入跨國資產定價之中。",
+      "source": "Reuters World",
+      "url": "https://www.reuters.com/world/",
+      "time": "2026-10-12 04:30 EST"
     },
     {
       "category": "美股指數",
       "icon": "fa-solid fa-chart-line",
       "color": "blue",
-      "title": "美股大盤科技股領漲，S&P 500 與 Nasdaq 保持多頭軌道",
+      "title": "科技巨頭獲利預期分化，S&P 500 與 Nasdaq 於歷史高位呈現廣度背離與估值防線考驗",
       "sentiment": "利多",
-      "summary": "AI 算力與雲端需求強勁，科技巨頭財報預期穩健，帶動主要美股指數在歷史高位附近穩健運行。",
+      "summary": "美股大盤指數呈現顯著的內部板塊輪動與廣度收窄特徵。S&P 500 盤中微幅收漲 0.6% 站穩多頭軌道，Nasdaq 100 指數 YTD 累積漲幅達 22.5%，主要動能依然由 AI 雲端巨頭（Microsoft、Alphabet、NVIDIA）優於預期之資本開支承諾所驅動。然而 CNBC 引述市場技術分析師警告，NYSE 騰落指標（A/D Line）近期連續 4 個交易日與指數形成微幅頂背離，Russell 2000 小型股表現明顯落後於大型科技股。當前 S&P 500 前瞻本益比已達 22 倍高位區間，本季企業財報法說會對於 2027 年毛利率指引將成為支撐當前估值乘數的唯一關鍵防線。",
       "source": "CNBC Markets",
       "url": "https://www.cnbc.com/markets/",
       "time": "2026-10-12 16:00 EST"
@@ -160,20 +160,20 @@
       "category": "利率與債券",
       "icon": "fa-solid fa-building-columns",
       "color": "sky",
-      "title": "PCE與ADP數據優於預期，盤前期貨走高",
-      "sentiment": "利多",
-      "summary": "摘要：核心PCE通膨數據顯示通膨持續降溫，ADP就業數據穩健，市場對聯準會11月暫停升息的預期升溫。",
-      "source": "市場頭條（*Pre-Markets Up on Excellent Data from PCE and ADP*）",
-      "url": "https://finance.yahoo.com",
-      "time": "2026-10-12 05:30 EST"
+      "title": "美 10 年期殖利率攀至 +0.44% 高位，核心 PCE 通膨黏著推升 Higher-for-Longer 利率維持定價",
+      "sentiment": "利空",
+      "summary": "美國債券市場持續消化「高利率維持更長時間（Higher for Longer）」之新常態定價。最新公布之核心 PCE 通膨年增率 3.71% 與非農 ADP 就業數據展現強大經濟韌性，導致芝加哥利率期貨（FedWatch）對聯準會年底前之降息碼數預期進一步收斂。美國 10 年期公債殖利率盤中揚升至 +0.44%，長天期美債期限溢價（Term Premium）正顯著修復。富國銀行（Wells Fargo）資深固收策略師發布報告示警，在美聯儲縮表（QT）與美財政部萬億發債融資壓力共振下，利率可能維持高位至 2027 年以後，高收益債信用利差雖收窄但長債 ETF（TLT）面臨技術面關鍵整數防線考驗。",
+      "source": "Bloomberg Rates & Bonds",
+      "url": "https://www.bloomberg.com/markets/rates-bonds",
+      "time": "2026-10-12 05:15 EST"
     },
     {
       "category": "外匯市場",
       "icon": "fa-solid fa-money-bill-transfer",
       "color": "emerald",
-      "title": "美元指數 DXY 位於 99~100 區間整固，主要貨幣波動收窄",
+      "title": "美元指數 DXY 堅守 99.46 區間，USD/JPY 逼近 153.5 敏感關卡觸發日銀口頭干預警戒",
       "sentiment": "中性",
-      "summary": "美歐央行貨幣政策分歧維持美元韌性，日圓套利平倉風險受控，台幣與亞洲貨幣維持區間震盪。",
+      "summary": "全球匯市呈現強勢美元與利差交易（Carry Trade）平倉博弈之拉鋸格局。美元指數（DXY）受美債殖利率居高不下支撐，維持在 99.46 水準區間整固；歐元兌美元（EUR/USD）受歐洲央行（ECB）偏鴿派降息基調壓制於 1.15 以下。路透社外匯專欄引述東京外匯交易主管分析，美元兌日圓（USD/JPY）再度逼近 153.42 敏感心理關卡，日本財務省官員已發出強烈口頭干預訊號，警告匯率過度單向波動將面臨果斷應對。新興市場貨幣整體抗跌，離岸人民幣（CNH）與台幣在央行適度調節下保持穩定區間波幅。",
       "source": "Reuters Currencies",
       "url": "https://www.reuters.com/markets/currencies/",
       "time": "2026-10-12 05:45 EST"
@@ -182,9 +182,9 @@
       "category": "國際股市",
       "icon": "fa-solid fa-globe",
       "color": "rose",
-      "title": "全球主要股市分化：日韓歐股調整，台股加權動能穩健",
+      "title": "亞歐股市走勢分化：台股加權 YTD 飆漲 68% 奪亞股之冠，日韓歐股面臨獲利了結回調",
       "sentiment": "利多",
-      "summary": "台股與科技供應鏈獲外資持續加碼，日經受匯率壓制拉回，新興市場如巴西 Bovespa 大漲展現資金輪動。",
+      "summary": "國際主要股市資金呈現鮮明之科技鏈聚攏效應。日經 225 指數受日圓潛在干預預期與出口企業獲利預警壓制，單日拉回 1.4% 收報 41,200 點；德國 DAX 與歐洲 STOXX 600 指數因製造業 PMI 疲軟小幅收黑。相較之下，台灣加權指數（TWSE）在台積電、聯發科與 AI 伺服器供應鏈（散熱、PCB、組裝）外資連續大額淨買超推動下，年初至今（YTD）累計回報率高達驚人的 +68.0%，傲視全球亞股之冠。Nikkei Asia 評論指出，全球半導體晶圓製造龍頭地位與先進封裝（CoWoS）產能供不應求，使台韓半導體板塊成為國際主動型多頭基金不可或缺的核心配置重鎮。",
       "source": "Nikkei Asia",
       "url": "https://asia.nikkei.com/",
       "time": "2026-10-12 15:30 JST"
