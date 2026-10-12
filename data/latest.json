@@ -13,7 +13,7 @@
       "position_size_pct": 80.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 989.91,
+      "current_price": 989.64,
       "price_date": "2026-10-12"
     },
     {
@@ -43,7 +43,7 @@
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 101.75,
+      "current_price": 101.86,
       "price_date": "2026-10-12"
     },
     {
@@ -58,7 +58,7 @@
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 237.74,
+      "current_price": 237.89,
       "price_date": "2026-10-12"
     },
     {
@@ -73,7 +73,7 @@
       "position_size_pct": 80.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 98.56,
+      "current_price": 98.39,
       "price_date": "2026-10-12"
     },
     {
@@ -118,7 +118,7 @@
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 114.03,
+      "current_price": 114.06,
       "price_date": "2026-10-12"
     }
   ],
@@ -160,9 +160,9 @@
       "category": "利率與債券",
       "icon": "fa-solid fa-building-columns",
       "color": "sky",
-      "title": "美 10 年期殖利率攀至 +0.44% 高位，核心 PCE 通膨黏著推升 Higher-for-Longer 利率維持定價",
+      "title": "美 10 年期殖利率攀至 5.24% 高位，核心 PCE 通膨黏著推升 Higher-for-Longer 利率維持定價",
       "sentiment": "利空",
-      "summary": "美國債券市場持續消化「高利率維持更長時間（Higher for Longer）」之新常態定價。最新公布之核心 PCE 通膨年增率 3.71% 與非農 ADP 就業數據展現強大經濟韌性，導致芝加哥利率期貨（FedWatch）對聯準會年底前之降息碼數預期進一步收斂。美國 10 年期公債殖利率盤中揚升至 +0.44%，長天期美債期限溢價（Term Premium）正顯著修復。富國銀行（Wells Fargo）資深固收策略師發布報告示警，在美聯儲縮表（QT）與美財政部萬億發債融資壓力共振下，利率可能維持高位至 2027 年以後，高收益債信用利差雖收窄但長債 ETF（TLT）面臨技術面關鍵整數防線考驗。",
+      "summary": "美國債券市場持續消化「高利率維持更長時間（Higher for Longer）」之新常態定價。最新公布之核心 PCE 通膨年增率 3.71% 與非農 ADP 就業數據展現強大經濟韌性，導致芝加哥利率期貨（FedWatch）對聯準會年底前之降息碼數預期進一步收斂。美國 10 年期公債殖利率盤中揚升至 5.24%，長天期美債期限溢價（Term Premium）正顯著修復。富國銀行（Wells Fargo）資深固收策略師發布報告示警，在美聯儲縮表（QT）與美財政部萬億發債融資壓力共振下，利率可能維持高位至 2027 年以後，高收益債信用利差雖收窄但長債 ETF（TLT）面臨技術面關鍵整數防線考驗。",
       "source": "Bloomberg Rates & Bonds",
       "url": "https://www.bloomberg.com/markets/rates-bonds",
       "time": "2026-10-12 05:15 EST"
