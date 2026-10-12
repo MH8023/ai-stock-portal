@@ -12,7 +12,9 @@
       "confidence_score": 4,
       "position_size_pct": 80.0,
       "actual_pct": 0.0,
-      "result": "待驗證"
+      "result": "待驗證",
+      "current_price": 1029.0,
+      "price_date": "2026-10-12"
     },
     {
       "type": "bull",
@@ -25,7 +27,9 @@
       "confidence_score": 5,
       "position_size_pct": 100.0,
       "actual_pct": 0.0,
-      "result": "待驗證"
+      "result": "待驗證",
+      "current_price": 532.0,
+      "price_date": "2026-10-12"
     },
     {
       "type": "bull",
@@ -38,7 +42,9 @@
       "confidence_score": 3,
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
-      "result": "待驗證"
+      "result": "待驗證",
+      "current_price": 104.7,
+      "price_date": "2026-10-12"
     },
     {
       "type": "bear",
@@ -51,7 +57,9 @@
       "confidence_score": 3,
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
-      "result": "待驗證"
+      "result": "待驗證",
+      "current_price": 242.27,
+      "price_date": "2026-10-12"
     },
     {
       "type": "bear",
@@ -64,7 +72,9 @@
       "confidence_score": 4,
       "position_size_pct": 80.0,
       "actual_pct": 0.0,
-      "result": "待驗證"
+      "result": "待驗證",
+      "current_price": 101.27,
+      "price_date": "2026-10-12"
     },
     {
       "type": "bear",
@@ -77,7 +87,9 @@
       "confidence_score": 3,
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
-      "result": "待驗證"
+      "result": "待驗證",
+      "current_price": 249.0,
+      "price_date": "2026-10-12"
     },
     {
       "type": "turnaround",
@@ -90,7 +102,9 @@
       "confidence_score": 4,
       "position_size_pct": 80.0,
       "actual_pct": 0.0,
-      "result": "待驗證"
+      "result": "待驗證",
+      "current_price": 1270.0,
+      "price_date": "2026-10-12"
     },
     {
       "type": "turnaround",
@@ -103,27 +117,77 @@
       "confidence_score": 3,
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
-      "result": "待驗證"
+      "result": "待驗證",
+      "current_price": 113.24,
+      "price_date": "2026-10-12"
     }
   ],
   "focus_events": [
     {
-      "title": "Alphabet大漲3%，白宮反壟斷態度軟化",
-      "sentiment": "利多",
-      "summary": "摘要：市場傳出白宮對Google搜尋壟斷案可能採取較溫和的補救措施，Alphabet股價單日跳漲3%，帶動科技板塊情緒回暖。",
-      "source": "CNBC（*Alphabet Rallies 3% as Traders Weigh White House...*）"
-    },
-    {
-      "title": "PCE與ADP數據優於預期，盤前期貨走高",
-      "sentiment": "利多",
-      "summary": "摘要：核心PCE通膨數據顯示通膨持續降溫，ADP就業數據穩健，市場對聯準會11月暫停升息的預期升溫。",
-      "source": "市場頭條（*Pre-Markets Up on Excellent Data from PCE and ADP*）"
-    },
-    {
+      "category": "原物料",
+      "icon": "fa-solid fa-oil-well",
+      "color": "amber",
       "title": "大型藥廠獲關稅豁免，生技股分化",
       "sentiment": "中性",
       "summary": "摘要：大型製藥公司獲得關稅豁免，但中小型生技股未獲同等待遇，板塊內部出現明顯分化。",
-      "source": "市場頭條（*Big Pharma Got Its Tariff Exemption. The Biotech...*）"
+      "source": "市場頭條（*Big Pharma Got Its Tariff Exemption. The Biotech...*）",
+      "url": "https://finance.yahoo.com",
+      "time": "2026-10-12 05:30 EST"
+    },
+    {
+      "category": "地緣政治",
+      "icon": "fa-solid fa-earth-americas",
+      "color": "purple",
+      "title": "Alphabet大漲3%，白宮反壟斷態度軟化",
+      "sentiment": "利多",
+      "summary": "摘要：市場傳出白宮對Google搜尋壟斷案可能採取較溫和的補救措施，Alphabet股價單日跳漲3%，帶動科技板塊情緒回暖。",
+      "source": "CNBC（*Alphabet Rallies 3% as Traders Weigh White House...*）",
+      "url": "https://www.cnbc.com",
+      "time": "2026-10-12 05:30 EST"
+    },
+    {
+      "category": "美股指數",
+      "icon": "fa-solid fa-chart-line",
+      "color": "blue",
+      "title": "美股大盤科技股領漲，S&P 500 與 Nasdaq 保持多頭軌道",
+      "sentiment": "利多",
+      "summary": "AI 算力與雲端需求強勁，科技巨頭財報預期穩健，帶動主要美股指數在歷史高位附近穩健運行。",
+      "source": "CNBC Markets",
+      "url": "https://www.cnbc.com/markets/",
+      "time": "2026-10-12 16:00 EST"
+    },
+    {
+      "category": "利率與債券",
+      "icon": "fa-solid fa-building-columns",
+      "color": "sky",
+      "title": "PCE與ADP數據優於預期，盤前期貨走高",
+      "sentiment": "利多",
+      "summary": "摘要：核心PCE通膨數據顯示通膨持續降溫，ADP就業數據穩健，市場對聯準會11月暫停升息的預期升溫。",
+      "source": "市場頭條（*Pre-Markets Up on Excellent Data from PCE and ADP*）",
+      "url": "https://finance.yahoo.com",
+      "time": "2026-10-12 05:30 EST"
+    },
+    {
+      "category": "外匯市場",
+      "icon": "fa-solid fa-money-bill-transfer",
+      "color": "emerald",
+      "title": "美元指數 DXY 位於 99~100 區間整固，主要貨幣波動收窄",
+      "sentiment": "中性",
+      "summary": "美歐央行貨幣政策分歧維持美元韌性，日圓套利平倉風險受控，台幣與亞洲貨幣維持區間震盪。",
+      "source": "Reuters Currencies",
+      "url": "https://www.reuters.com/markets/currencies/",
+      "time": "2026-10-12 05:45 EST"
+    },
+    {
+      "category": "國際股市",
+      "icon": "fa-solid fa-globe",
+      "color": "rose",
+      "title": "全球主要股市分化：日韓歐股調整，台股加權動能穩健",
+      "sentiment": "利多",
+      "summary": "台股與科技供應鏈獲外資持續加碼，日經受匯率壓制拉回，新興市場如巴西 Bovespa 大漲展現資金輪動。",
+      "source": "Nikkei Asia",
+      "url": "https://asia.nikkei.com/",
+      "time": "2026-10-12 15:30 JST"
     }
   ],
   "global_market": [
