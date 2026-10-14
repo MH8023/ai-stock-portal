@@ -43,7 +43,7 @@
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 112.0,
+      "current_price": 157.0,
       "price_date": "2026-10-14"
     },
     {
@@ -73,7 +73,7 @@
       "position_size_pct": 60.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 52.2,
+      "current_price": 57.3,
       "price_date": "2026-10-14"
     },
     {
@@ -103,7 +103,7 @@
       "position_size_pct": 80.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 104.5,
+      "current_price": 90.0,
       "price_date": "2026-10-14"
     },
     {
@@ -118,7 +118,7 @@
       "position_size_pct": 80.0,
       "actual_pct": 0.0,
       "result": "待驗證",
-      "current_price": 115.5,
+      "current_price": null,
       "price_date": "2026-10-14"
     }
   ],
